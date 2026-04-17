@@ -1,0 +1,33 @@
+# Gradle files
+.gradle/
+build/
+
+# IDE files
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Android Studio local configuration
+local.properties
+
+# Log files
+*.log
+
+# Output files
+*.apk
+*.bundle
+*.aar
+
+# OS files
+.DS_Store
+
+# Gradle Wrapper (optional to ignore, but usually kept in repo)
+# !gradle/wrapper/gradle-wrapper.jar
+# !gradle/wrapper/gradle-wrapper.properties
+# !gradlew
+# !gradlew.bat
+
+# Captures and profiling
+/captures/
+*.hprof
