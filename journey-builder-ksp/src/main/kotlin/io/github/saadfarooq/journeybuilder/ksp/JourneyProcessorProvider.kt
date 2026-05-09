@@ -1,4 +1,4 @@
-package com.github.saadfarooq.journeybuilder.ksp
+package io.github.saadfarooq.journeybuilder.ksp
 
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment

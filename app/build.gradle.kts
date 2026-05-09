@@ -3,14 +3,15 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
+    id("kotlin-parcelize")
 }
 
 android {
-    namespace = "com.example.formbuilderpager"
+    namespace = "io.github.saadfarooq.journeybuilder.sample"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.formbuilderpager"
+        applicationId = "io.github.saadfarooq.journeybuilder.sample"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -53,6 +54,7 @@ dependencies {
     ksp(project(":journey-builder-ksp"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)

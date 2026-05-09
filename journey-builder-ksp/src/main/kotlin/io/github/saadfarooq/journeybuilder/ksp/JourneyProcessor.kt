@@ -1,4 +1,4 @@
-package com.github.saadfarooq.journeybuilder.ksp
+package io.github.saadfarooq.journeybuilder.ksp
 
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.KSPLogger
@@ -20,7 +20,7 @@ class JourneyProcessor(
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
         val symbols = resolver
-            .getSymbolsWithAnnotation("com.github.saadfarooq.journeybuilder.Journey")
+            .getSymbolsWithAnnotation("io.github.saadfarooq.journeybuilder.Journey")
             .filterIsInstance<KSClassDeclaration>()
 
         val deferred = symbols.filter { !it.validate() }.toList()
@@ -51,15 +51,23 @@ class JourneyProcessor(
             return
         }
 
+        val journeyAnnotation = formDecl.annotations.first { it.shortName.asString() == "Journey" }
+        val parcelable = journeyAnnotation.arguments
+            .firstOrNull { it.name?.asString() == "parcelable" }
+            ?.value as? Boolean ?: false
+        val parcelableClass = ClassName("android.os", "Parcelable")
+        val parcializeClass = ClassName("kotlinx.parcelize", "Parcelize")
+
         val sealedClassName = ClassName(packageName, stateName)
-        val journeyMachineClass = ClassName("com.github.saadfarooq.journeybuilder", "JourneyStateMachine")
-        val backRestorableClass = ClassName("com.github.saadfarooq.journeybuilder", "BackRestorable")
-        val backNavigableClass = ClassName("com.github.saadfarooq.journeybuilder", "BackNavigable")
+        val journeyMachineClass = ClassName("io.github.saadfarooq.journeybuilder", "JourneyStateMachine")
+        val backRestorableClass = ClassName("io.github.saadfarooq.journeybuilder", "BackRestorable")
+        val backNavigableClass = ClassName("io.github.saadfarooq.journeybuilder", "BackNavigable")
 
         val fileBuilder = FileSpec.builder(packageName, stateName)
 
         val sealedClassBuilder = TypeSpec.classBuilder(stateName)
             .addModifiers(KModifier.SEALED)
+            .apply { if (parcelable) addSuperinterface(parcelableClass) }
 
         // Initial: data class with previous<Step1>: Step1? = null, implements BackRestorable
         val firstStepName = orderedSteps[0].simpleName.asString()
@@ -92,6 +100,7 @@ class JourneyProcessor(
                     .addStatement("return copy($initialPropName = from as? %T)", firstStepClass)
                     .build()
             )
+        if (parcelable) initialBuilder.addAnnotation(parcializeClass)
         sealedClassBuilder.addType(initialBuilder.build())
 
         for ((index, step) in orderedSteps.withIndex()) {
@@ -167,6 +176,7 @@ class JourneyProcessor(
             }
 
             dataClassBuilder.primaryConstructor(constructorBuilder.build())
+            if (parcelable) dataClassBuilder.addAnnotation(parcializeClass)
             sealedClassBuilder.addType(dataClassBuilder.build())
         }
 
