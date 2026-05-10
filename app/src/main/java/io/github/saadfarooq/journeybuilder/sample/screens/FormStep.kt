@@ -1,4 +1,4 @@
-package com.example.formbuilderpager.screens
+package io.github.saadfarooq.journeybuilder.sample.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text

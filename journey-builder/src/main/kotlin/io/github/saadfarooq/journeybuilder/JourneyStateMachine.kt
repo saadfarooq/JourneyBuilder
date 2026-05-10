@@ -1,4 +1,4 @@
-package com.github.saadfarooq.journeybuilder
+package io.github.saadfarooq.journeybuilder
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
