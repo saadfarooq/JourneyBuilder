@@ -149,6 +149,20 @@ class JourneyProcessor(
                 )
             }
 
+            for (ancestorIndex in 0 until index) {
+                val ancestorProps = orderedSteps[ancestorIndex].getAllProperties()
+                    .filter { it.parentDeclaration == orderedSteps[ancestorIndex] }
+                for (prop in ancestorProps) {
+                    val propName = prop.simpleName.asString()
+                    val propType = prop.type.toTypeName()
+                    dataClassBuilder.addProperty(
+                        PropertySpec.builder(propName, propType)
+                            .getter(FunSpec.getterBuilder().addStatement("return prev.%N", propName).build())
+                            .build()
+                    )
+                }
+            }
+
             if (!isLastStep) {
                 val nextStepNameForProp = orderedSteps[index + 1].simpleName.asString()
                 val nextStepClassForProp = ClassName(packageName, stateName, nextStepNameForProp)

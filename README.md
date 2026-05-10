@@ -129,8 +129,8 @@ fun RegistrationFlow(machine: JourneyStateMachine<RegistrationFormState>) {
 
         is RegistrationFormState.AgeDetails ->
             SummaryScreen(
-                firstName = s.prev.prev.firstName,
-                lastName  = s.prev.lastName,
+                firstName = s.firstName,
+                lastName  = s.lastName,
                 age       = s.age,
                 onStartOver = { machine.reset(RegistrationFormState.Initial()) }
             )

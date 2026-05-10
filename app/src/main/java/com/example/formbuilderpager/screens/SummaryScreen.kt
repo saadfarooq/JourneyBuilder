@@ -14,8 +14,8 @@ fun SummaryScreen(state: RegistrationFormState.AgeDetails, onStartOver: () -> Un
     FormStep(title = "Summary") {
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(16.dp)) {
-                Text("First Name: ${state.prev.prev.firstName}")
-                Text("Last Name: ${state.prev.lastName}")
+                Text("First Name: ${state.firstName}")
+                Text("Last Name: ${state.lastName}")
                 Text("Age: ${state.age}")
             }
         }
